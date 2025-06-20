@@ -1,11 +1,12 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+# database/models.py
+from sqlalchemy import Column, Integer, String, DateTime
+from database.db import Base
 
-Base = declarative_base()
-
-class User(Base):
-    __tablename__ = "users"
+class Report(Base):
+    __tablename__ = "reports"
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True)
-    username = Column(String)
-    role = Column(String)  # 'dubber', 'timer', 'admin'
+    user_id = Column(Integer)
+    title = Column(String)
+    episode = Column(Integer)
+    status = Column(String)  # "done" или "delayed"
+    created_at = Column(DateTime)
