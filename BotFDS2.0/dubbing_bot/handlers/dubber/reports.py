@@ -18,3 +18,4 @@ def setup_report_handlers(bot: TeleBot):
         # Отправляем файл
         with open(filename, 'rb') as file:
             bot.send_document(message.chat.id, file, caption="📊 Все отчёты")
+            bot.send_message(message.chat.id, "Отчёт принят! Хотите добавить ещё?")

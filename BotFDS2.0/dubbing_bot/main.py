@@ -1,12 +1,23 @@
-import telebot
-from telebot.types import ReplyKeyboardMarkup
-from handlers.dubber import setup_dubber_handlers
-from handlers.reports import setup_report_handlers
-setup_report_handlers(bot)
+import logging
+from telebot import TeleBot
 from config import BOT_TOKEN
+from handlers.reports import setup_report_handlers
+from telebot.types import ReplyKeyboardMarkup
+
+from handlers.dubber import setup_dubber_handlers
+
+setup_report_handlers(bot)
+
+logging.basicConfig(
+    level=logging.INFO,
+    filename='bot.log',
+    format='%(asctime)s - %(message)s',
+    encoding='utf-8')  # Важно для русскоязычного текста
 
 bot = telebot.TeleBot('7833834785:AAH_EQDJ5Ax9Viq32g9xWfy40Ve9IfmTrWk')
 setup_dubber_handlers(bot)  # Регистрация обработчиков даббера
+
+
 
 # Клавиатура для выбора роли
 def role_keyboard():
