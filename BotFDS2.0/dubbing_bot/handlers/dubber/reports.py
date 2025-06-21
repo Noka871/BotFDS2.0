@@ -1,27 +1,16 @@
-from telebot.types import ReplyKeyboardMarkup
-from database.requests import create_report
+from telebot import TeleBot
+from telebot.types import Message
 
-def register_dubber_handlers(bot):
-    @bot.message_handler(func=lambda m: m.text == "📝 Отправить отчет")
-    def select_title(message):
-        markup = ReplyKeyboardMarkup(resize_keyboard=True)
-        # Здесь нужно добавить тайтлы из БД
-        markup.add("Тайтл 1", "Тайтл 2", "Назад")
-        bot.send_message(message.chat.id, "Выберите тайтл:", reply_markup=markup)
 
-    @bot.message_handler(func=lambda m: m.text in ["Тайтл 1", "Тайтл 2"])
-    def select_episode(message):
-        bot.send_message(message.chat.id, "Введите номер серии:")
-        bot.register_next_step_handler(message, process_episode)
+def setup_dubber_handlers(bot: TeleBot):
+    @bot.message_handler(func=lambda message: message.text == "📝 Отправить отчет")
+    def handle_report(message: Message):
+        bot.reply_to(message, "🔍 Выберите тайтл:")  # Ответ с цитированием
 
-    def process_episode(message):
-        try:
-            episode = int(message.text)
-            markup = ReplyKeyboardMarkup(resize_keyboard=True)
-            markup.add("✅ Сдал", "⚠ Задержка")
-            bot.send_message(message.chat.id, "Статус:", reply_markup=markup)
-            bot.register_next_step_handler(
-                message,
-                lambda m: process_report(m, episode)
-        except ValueError:
-            bot.send_message(message.chat.id, "Введите число!")
+    @bot.message_handler(func=lambda message: message.text == "⚠ Форс-мажор")
+    def handle_emergency(message: Message):
+        bot.send_message(message.chat.id, "✍️ Опишите проблему:")  # Новое сообщение
+
+    @bot.message_handler(func=lambda message: message.text == "📊 Мои долги")
+    def handle_debts(message: Message):
+        bot.send_message(message.chat.id, "🔄 Загружаю список долгов...")
