@@ -1,16 +1,20 @@
+# handlers/reports.py
 from telebot import TeleBot
 from telebot.types import Message
+from database.requests import get_all_reports
+import pandas as pd
 
 
-def setup_dubber_handlers(bot: TeleBot):
-    @bot.message_handler(func=lambda message: message.text == "📝 Отправить отчет")
-    def handle_report(message: Message):
-        bot.reply_to(message, "🔍 Выберите тайтл:")  # Ответ с цитированием
+def setup_report_handlers(bot: TeleBot):
+    @bot.message_handler(commands=['export_reports'])
+    def export_reports(message: Message):
+        reports = get_all_reports()  # Ваша функция из database/requests.py
 
-    @bot.message_handler(func=lambda message: message.text == "⚠ Форс-мажор")
-    def handle_emergency(message: Message):
-        bot.send_message(message.chat.id, "✍️ Опишите проблему:")  # Новое сообщение
+        # Создаём Excel-файл
+        df = pd.DataFrame(reports)
+        filename = "reports.xlsx"
+        df.to_excel(filename, index=False)
 
-    @bot.message_handler(func=lambda message: message.text == "📊 Мои долги")
-    def handle_debts(message: Message):
-        bot.send_message(message.chat.id, "🔄 Загружаю список долгов...")
+        # Отправляем файл
+        with open(filename, 'rb') as file:
+            bot.send_document(message.chat.id, file, caption="📊 Все отчёты")
