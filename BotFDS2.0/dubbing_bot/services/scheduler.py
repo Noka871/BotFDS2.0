@@ -11,3 +11,10 @@ async def send_dubber_reminders(bot: Bot):
 
         async def send_reminders():
             await broadcast_message(bot, "Напоминание: сдать отчёты!")
+
+            from services.broadcaster import broadcast
+
+            async def send_reminders(bot: Bot):
+                reports = await get_overdue_reports()
+                for report in reports:
+                    await broadcast(bot, f"Просрочен отчет: {report.title}")

@@ -31,3 +31,13 @@ class Report(Base):
             Column('user_id', ForeignKey('users.id')),
             Column('title_id', ForeignKey('titles.id'))
         )
+
+        class User(Base):
+            # ...
+            reports = relationship("Report", back_populates="user")
+            titles = relationship("Title", secondary="user_titles")
+
+        class Report(Base):
+            # ...
+            user_id = Column(Integer, ForeignKey('users.id'))
+            user = relationship("User", back_populates="reports")
