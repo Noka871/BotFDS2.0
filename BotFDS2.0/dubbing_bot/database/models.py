@@ -46,4 +46,6 @@ class Report(Base):
         class Report(Base):
             __table_args__ = (
                 Index('ix_report_user_episode', 'user_id', 'episode'),  # Составной индекс
+                Index('ix_report_created_at', 'created_at')  # Для аналитики
             )
+

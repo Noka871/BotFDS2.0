@@ -1,16 +1,28 @@
-# main.py
-from handlers.admin import register_handlers_admin
-from handlers.dubber import register_handlers_dubber
-from middlewares.throttle import ThrottlingMiddleware
-from services.broadcaster import broadcast_message
-def main():
-    dp.middleware.setup(ThrottlingMiddleware())
-    register_handlers_admin(dp)
-    register_handlers_dubber(dp)
+import telebot
+from telebot.types import ReplyKeyboardMarkup
+from config import BOT_TOKEN
 
-    # Для теста можно добавить команду
-    @dp.message_handler(commands="broadcast")
-    async def cmd_broadcast(message: types.Message):
-        await broadcast_message(bot, "Тестовое уведомление!")
+bot = telebot.TeleBot('7833834785:AAH_EQDJ5Ax9Viq32g9xWfy40Ve9IfmTrWk')
 
+# Клавиатура для выбора роли
+def role_keyboard():
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add("🔊 Даббер", "⏱ Таймер", "👑 Админ")
+    return markup
 
+@bot.message_handler(commands=['start'])
+def start(message):
+    bot.send_message(
+        message.chat.id,
+        "👋 Добро пожаловать! Выберите роль:",
+        reply_markup=role_keyboard()
+    )
+
+@bot.message_handler(func=lambda m: m.text == "🔊 Даббер")
+def dubber_menu(message):
+    markup = ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add("📝 Отправить отчет", "⚠ Форс-мажор", "📊 Мои долги")
+    bot.send_message(message.chat.id, "Меню даббера:", reply_markup=markup)
+
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
