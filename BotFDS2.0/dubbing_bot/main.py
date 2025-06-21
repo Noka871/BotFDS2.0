@@ -1,8 +1,10 @@
 import telebot
 from telebot.types import ReplyKeyboardMarkup
+from handlers.dubber import setup_dubber_handlers
 from config import BOT_TOKEN
 
 bot = telebot.TeleBot('7833834785:AAH_EQDJ5Ax9Viq32g9xWfy40Ve9IfmTrWk')
+setup_dubber_handlers(bot)  # Регистрация обработчиков даббера
 
 # Клавиатура для выбора роли
 def role_keyboard():
