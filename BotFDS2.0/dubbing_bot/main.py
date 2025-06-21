@@ -5,17 +5,16 @@ logging.basicConfig(
     format='%(asctime)s - %(message)s',
     encoding='utf-8'
 )
-from handlers.reports import setup_report_handlers
-from telebot.types import ReplyKeyboardMarkup
-
+from telebot import TeleBot
+from config import BOT_TOKEN
 from handlers.dubber import setup_dubber_handlers
 
-setup_report_handlers(bot)
+bot = TeleBot(BOT_TOKEN())
+setup_dubber_handlers(bot)
 
-bot = telebot.TeleBot('7833834785:AAH_EQDJ5Ax9Viq32g9xWfy40Ve9IfmTrWk')
-setup_dubber_handlers(bot)  # Регистрация обработчиков даббера
-
-
+if __name__ == '__main__':
+    print("Бот запускается...")  # Для отладки
+    bot.polling(none_stop=True, interval=2)  # Интервал опроса 2 сек
 
 # Клавиатура для выбора роли
 def role_keyboard():
