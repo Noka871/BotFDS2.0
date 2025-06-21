@@ -1,6 +1,7 @@
 # database/models.py
 from sqlalchemy import Column, Integer, String, DateTime
 from database.db import Base
+from sqlalchemy import Index
 
 class Report(Base):
     __tablename__ = "reports"
@@ -41,3 +42,8 @@ class Report(Base):
             # ...
             user_id = Column(Integer, ForeignKey('users.id'))
             user = relationship("User", back_populates="reports")
+
+        class Report(Base):
+            __table_args__ = (
+                Index('ix_report_user_episode', 'user_id', 'episode'),  # Составной индекс
+            )
