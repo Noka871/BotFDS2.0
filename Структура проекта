@@ -1,46 +1,60 @@
 BotFDS2.0/
-├── .env                    # Конфиденциальные данные
-├── config/                 # Конфигурация
+├── .env
+├── config/
 │   ├── __init__.py
-│   ├── settings.py         # Настройки бота
-│   └── constants.py        # Константы (роли, статусы)
-├── core/                   # Ядро бота
+│   ├── settings.py
+│   └── constants.py
+├── core/
 │   ├── __init__.py
-│   ├── bot.py              # Инициализация бота
-│   └── middlewares/        # Промежуточное ПО
+│   ├── bot.py
+│   └── middlewares/
 │       ├── __init__.py
-│       ├── throttling.py   # Защита от спама
-│       └── acl.py          # Проверка прав доступа
-├── database/               # Работа с данными
+│       ├── throttling.py
+│       ├── acl.py
+│       └── logging.py      # NEW: Логирование действий
+├── database/
 │   ├── __init__.py
-│   ├── models.py          # SQLAlchemy модели
-│   ├── crud.py            # CRUD операции
-│   └── session.py         # Сессии БД
-├── handlers/               # Обработчики
+│   ├── models.py
+│   ├── crud.py
+│   ├── session.py
+│   └── test_utils.py      # NEW: Утилиты для тестов БД
+├── handlers/
 │   ├── __init__.py
-│   ├── common/            # Общие команды
+│   ├── common/
 │   │   ├── __init__.py
-│   │   ├── start.py       # /start, /help
-│   │   └── cancel.py      # Отмена действий
-│   ├── dubber/            # Логика дабберов
+│   │   ├── start.py
+│   │   └── cancel.py
+│   ├── dubber/
 │   │   ├── __init__.py
-│   │   ├── reports.py     # Сдача отчётов
-│   │   └── debts.py       # Просмотр долгов
-│   ├── timer/             # Логика таймеров
+│   │   ├── reports.py
+│   │   ├── debts.py
+│   │   └── force_majeure.py # NEW: Форс-мажоры
+│   ├── timer/
 │   │   ├── __init__.py
-│   │   ├── titles.py      # Управление тайтлами
-│   │   └── penalties.py   # Штрафы
-│   └── admin/             # Админ-панель
+│   │   ├── titles.py
+│   │   ├── penalties.py
+│   │   └── notifications.py # NEW: Уведомления о метках
+│   └── admin/
 │       ├── __init__.py
-│       ├── export.py      # Выгрузка отчётов
-│       └── broadcast.py   # Рассылки
-├── services/              # Сервисы
+│       ├── export.py
+│       └── broadcast.py
+├── services/
 │   ├── __init__.py
-│   ├── notifications.py   # Уведомления
-│   ├── scheduler.py       # Планировщик задач
-│   └── excel_export.py    # Генерация Excel
-├── utils/                 # Вспомогательные модули
+│   ├── notifications.py
+│   ├── scheduler.py
+│   ├── excel_export.py
+│   └── penalty_calculator.py # NEW: Логика штрафов
+├── utils/
 │   ├── __init__.py
-│   ├── states.py         # Состояния FSM
-│   └── keyboards.py      # Генератор клавиатур
-└── main.py               # Точка входа
+│   ├── states.py
+│   ├── keyboards.py
+│   └── validators.py       # NEW: Валидация ввода
+├── tests/                  # NEW: Папка для тестов
+│   ├── __init__.py
+│   ├── test_database.py
+│   ├── test_handlers.py
+│   └── test_imports.py
+├── main.py
+├── .gitignore
+├── requirements.txt        # NEW: Зависимости
+└── README.md               # NEW: Документация
