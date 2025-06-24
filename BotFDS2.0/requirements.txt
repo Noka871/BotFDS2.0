@@ -1,0 +1,12 @@
+# Основные зависимости
+aiogram==3.0.0b7
+python-dotenv==1.0.0
+sqlalchemy==2.0.25
+alembic==1.13.1
+apscheduler==3.10.4
+openpyxl==3.1.2
+redis==5.0.0
+
+# Для разработки (необязательно)
+pytest==7.4.0
+pytest-asyncio==0.23.5
