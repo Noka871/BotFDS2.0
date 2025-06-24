@@ -1,2 +1,0 @@
-def reports():
-    return None

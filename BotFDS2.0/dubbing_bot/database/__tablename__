@@ -1,5 +1,0 @@
-user_titles = Table(
-    'user_titles', Base.metadata,
-    Column('user_id', ForeignKey('users.id'), primary_key=True),
-    Column('title_id', ForeignKey('titles.id'), primary_key=True)
-)
