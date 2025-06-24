@@ -1,0 +1,46 @@
+BotFDS2.0/
+├── .env                    # Конфиденциальные данные
+├── config/                 # Конфигурация
+│   ├── __init__.py
+│   ├── settings.py         # Настройки бота
+│   └── constants.py        # Константы (роли, статусы)
+├── core/                   # Ядро бота
+│   ├── __init__.py
+│   ├── bot.py              # Инициализация бота
+│   └── middlewares/        # Промежуточное ПО
+│       ├── __init__.py
+│       ├── throttling.py   # Защита от спама
+│       └── acl.py          # Проверка прав доступа
+├── database/               # Работа с данными
+│   ├── __init__.py
+│   ├── models.py          # SQLAlchemy модели
+│   ├── crud.py            # CRUD операции
+│   └── session.py         # Сессии БД
+├── handlers/               # Обработчики
+│   ├── __init__.py
+│   ├── common/            # Общие команды
+│   │   ├── __init__.py
+│   │   ├── start.py       # /start, /help
+│   │   └── cancel.py      # Отмена действий
+│   ├── dubber/            # Логика дабберов
+│   │   ├── __init__.py
+│   │   ├── reports.py     # Сдача отчётов
+│   │   └── debts.py       # Просмотр долгов
+│   ├── timer/             # Логика таймеров
+│   │   ├── __init__.py
+│   │   ├── titles.py      # Управление тайтлами
+│   │   └── penalties.py   # Штрафы
+│   └── admin/             # Админ-панель
+│       ├── __init__.py
+│       ├── export.py      # Выгрузка отчётов
+│       └── broadcast.py   # Рассылки
+├── services/              # Сервисы
+│   ├── __init__.py
+│   ├── notifications.py   # Уведомления
+│   ├── scheduler.py       # Планировщик задач
+│   └── excel_export.py    # Генерация Excel
+├── utils/                 # Вспомогательные модули
+│   ├── __init__.py
+│   ├── states.py         # Состояния FSM
+│   └── keyboards.py      # Генератор клавиатур
+└── main.py               # Точка входа
