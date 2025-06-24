@@ -5,7 +5,9 @@ load_dotenv()
 
 class Settings:
     BOT_TOKEN = os.getenv("BOT_TOKEN")
-    ADMIN_IDS = [int(x) for x in os.getenv("ADMIN_IDS").split(",")]
-    DB_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///database.db")
+    ADMIN_IDS = list(map(int, os.getenv("ADMIN_IDS", "").split(",")))
 
-config = Settings()
+    @classmethod
+    def validate(cls):
+        if not cls.BOT_TOKEN:
+            raise ValueError("Токен бота не указан в .env")

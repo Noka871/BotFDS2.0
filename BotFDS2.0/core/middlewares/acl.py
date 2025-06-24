@@ -1,8 +1,7 @@
 from aiogram.dispatcher.middlewares import BaseMiddleware
-from config.constants import Roles
 
 class ACLMiddleware(BaseMiddleware):
-    async def on_pre_process_message(self, message: types.Message, data: dict):
-        # Проверка прав доступа
-        user_role = await get_user_role(message.from_user.id)  # Функция из CRUD
-        data["role"] = user_role
+    async def on_process_message(self, message: types.Message, data: dict):
+        if message.from_user.id not in config.ADMIN_IDS:
+            await message.answer("Доступ запрещён")
+            raise CancelHandler()
