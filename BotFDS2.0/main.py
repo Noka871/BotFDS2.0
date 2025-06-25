@@ -2,27 +2,24 @@
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-
 from config import Config
-from bot.handlers import setup_handlers
-from bot.middlewares import setup_middlewares
+from bot.handlers import register_handlers
+from bot.middlewares import register_middlewares
+from bot.utils.scheduler import setup_scheduler
+
 
 
 async def main():
-    config = Config.load()
+    from services.database.core import create_db
+    await create_db()  # Создаём БД
+    config = Config()
+    bot = Bot(token=config.BOT_TOKEN)
+    dp = Dispatcher(storage=MemoryStorage())
 
-    # Инициализация бота и диспетчера
-    bot = Bot(token=config.bot.token)
-    storage = MemoryStorage()
-    dp = Dispatcher(storage=storage)
+    register_middlewares(dp, config)
+    register_handlers(dp)
+    setup_scheduler(bot)  # Планировщик для напоминаний
 
-    # Настройка middleware
-    setup_middlewares(dp, config)
-
-    # Настройка обработчиков
-    setup_handlers(dp)
-
-    # Запуск бота
     try:
         await dp.start_polling(bot)
     finally:
