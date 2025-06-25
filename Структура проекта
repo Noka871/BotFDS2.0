@@ -1,29 +1,51 @@
 BotFDS2.0/
 ├── bot/
 │   ├── __init__.py
-│   ├── main.py              # Точка входа
+│   ├── main.py              # Точка входа (обновленный для aiogram 3.x)
 │   ├── filters/             # Кастомные фильтры
-│   │   └── __init__.py
+│   │   ├── __init__.py
+│   │   └── role_filter.py   # Фильтр по ролям пользователя
 │   ├── handlers/            # Обработчики сообщений
-│   │   ├── __init__.py      # Регистрация всех обработчиков
-│   │   ├── admin.py         # Админ-команды
-│   │   ├── common.py        # Общие обработчики
-│   │   ├── dubber.py        # Логика дабберов
-│   │   └── timer.py         # Логика таймеров
+│   │   ├── __init__.py      # Регистрация всех обработчиков (обновленный)
+│   │   ├── admin/           # Админ-команды
+│   │   │   ├── __init__.py
+│   │   │   ├── commands.py
+│   │   │   └── reports.py
+│   │   ├── common/          # Общие обработчики
+│   │   │   ├── __init__.py
+│   │   │   ├── start.py
+│   │   │   └── menu.py
+│   │   ├── dubber/          # Логика дабберов
+│   │   │   ├── __init__.py
+│   │   │   ├── titles.py
+│   │   │   ├── reports.py
+│   │   │   └── debts.py
+│   │   └── timer/           # Логика таймеров
+│   │       ├── __init__.py
+│   │       ├── titles.py
+│   │       ├── notifications.py
+│   │       └── penalties.py
 │   ├── keyboards/           # Клавиатуры
 │   │   ├── __init__.py
-│   │   ├── builders.py      # Построители клавиатур
+│   │   ├── builders.py      # Построители клавиатур (обновленный)
 │   │   └── templates.py     # Шаблоны кнопок
 │   ├── middlewares/         # Промежуточное ПО
 │   │   ├── __init__.py
-│   │   └── throttling.py    # Антифлуд
+│   │   ├── database.py      # Middleware для работы с БД
+│   │   └── throttling.py    # Антифлуд (обновленный)
 │   ├── services/            # Бизнес-логика
 │   │   ├── __init__.py
-│   │   ├── database.py      # Работа с БД
+│   │   ├── database/        # Работа с БД
+│   │   │   ├── __init__.py
+│   │   │   ├── core.py
+│   │   │   ├── models.py
+│   │   │   └── repositories.py
 │   │   ├── notifications.py # Уведомления
 │   │   └── reporting.py     # Генерация отчетов
-│   ├── states/              # Состояния FSM
-│   │   └── __init__.py
+│   ├── states/              # Состояния FSM (обновленный для aiogram 3.x)
+│   │   ├── __init__.py
+│   │   ├── dubber.py
+│   │   └── timer.py
 │   └── utils/               # Вспомогательные утилиты
 │       ├── __init__.py
 │       ├── scheduler.py     # Планировщик задач
@@ -31,5 +53,5 @@ BotFDS2.0/
 ├── config.py                # Конфигурация
 ├── .env                     # Переменные окружения
 ├── .gitignore
-├── requirements.txt
+├── requirements.txt         # Обновленные зависимости для aiogram 3.x
 └── README.md
