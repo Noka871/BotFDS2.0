@@ -1,25 +1,24 @@
 BotFDS2.0/
-├── app/
-│   ├── bot/                # Ядро бота
-│   │   ├── __init__.py
-│   │   ├── loader.py       # Инициализация бота и диспетчера
-│   │   └── middlewares/    # Промежуточное ПО
-│   ├── db/                 # Работа с БД
-│   │   ├── models.py       # SQLAlchemy 2.0 модели
-│   │   └── queries.py      # Асинхронные запросы
-│   ├── handlers/           # Обработчики
-│   │   ├── dubber/         # Логика дабберов
-│   │   ├── timer/          # Логика таймеров
-│   │   └── admin.py        # Админ-панель
-│   ├── keyboards/          # Клавиатуры
-│   │   ├── builders.py     # Паттерн Builder для кнопок
-│   │   └── layouts.py      # Готовые раскладки
-│   ├── services/           # Сервисы
-│   │   ├── notifier.py     # Уведомления
-│   │   └── reporter.py     # Генерация отчетов
-│   └── utils/
-│       ├── states.py       # Состояния FSM
-│       └── filters.py      # Кастомные фильтры
-├── config.py               # Настройки
-├── main.py                 # Точка входа
-└── .env                    # Переменные окружения
+├── config/
+│   ├── __init__.py
+│   └── config.py
+├── data/
+│   ├── db.py
+│   └── models.py
+├── handlers/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── dubber.py
+│   └── timer.py
+├── keyboards/
+│   ├── __init__.py
+│   └── inline.py
+├── services/
+│   ├── __init__.py
+│   ├── notifications.py
+│   └── spreadsheet.py
+├── utils/
+│   ├── __init__.py
+│   └── states.py
+├── main.py
+└── requirements.txt
