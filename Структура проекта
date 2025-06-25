@@ -1,1 +1,19 @@
-
+BotFDS2.0/
+├── bot/
+│   ├── __init__.py
+│   ├── main.py              # Точка входа
+│   ├── handlers/            # Обработчики команд
+│   │   ├── __init__.py
+│   │   ├── admin.py
+│   │   ├── dubber.py
+│   │   ├── timer.py
+│   │   └── common.py
+│   ├── middlewares/         # Промежуточное ПО
+│   ├── services/            # Бизнес-логика
+│   │   ├── database.py
+│   │   ├── notifications.py
+│   │   └── reporting.py
+│   └── utils/               # Вспомогательные функции
+├── config.py                # Конфигурация
+├── requirements.txt
+└── README.md
