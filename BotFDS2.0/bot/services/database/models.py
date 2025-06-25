@@ -15,6 +15,7 @@ class User(Base):
     role = Column(String(20), nullable=False)  # 'dubber', 'timer', 'admin'
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # Связи с другими таблицами
     titles = relationship('UserTitle', back_populates='user')
 
 
@@ -31,6 +32,7 @@ class Title(Base):
 
 
 class UserTitle(Base):
+    """Связующая таблица между пользователями и тайтлами"""
     __tablename__ = 'user_titles'
 
     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
@@ -38,3 +40,16 @@ class UserTitle(Base):
 
     user = relationship('User', back_populates='titles')
     title = relationship('Title', back_populates='users')
+
+
+class Episode(Base):
+    __tablename__ = 'episodes'
+
+    id = Column(Integer, primary_key=True)
+    title_id = Column(Integer, ForeignKey('titles.id'))
+    number = Column(Integer, nullable=False)
+    is_completed = Column(Boolean, default=False)
+    deadline = Column(DateTime)
+    completed_at = Column(DateTime)
+
+    title = relationship('Title', back_populates='episodes')

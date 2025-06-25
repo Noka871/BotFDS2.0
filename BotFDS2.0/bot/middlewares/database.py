@@ -2,7 +2,7 @@
 from aiogram import BaseMiddleware
 from typing import Callable, Awaitable, Any
 from aiogram.types import TelegramObject
-from services.database.core import async_session
+from services.database.core import get_session
 
 class DBSessionMiddleware(BaseMiddleware):
     async def __call__(
@@ -11,6 +11,7 @@ class DBSessionMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any]
     ) -> Any:
-        async with async_session() as session:
-            data['session'] = session
+        async for session in get_session():
+            data["session"] = session
             return await handler(event, data)
+

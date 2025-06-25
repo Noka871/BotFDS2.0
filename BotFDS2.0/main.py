@@ -1,27 +1,30 @@
 # Точка входа
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import Config
-from bot.handlers import register_handlers
-from bot.middlewares import register_middlewares
-from bot.utils.scheduler import setup_scheduler
-
 
 
 async def main():
-    from services.database.core import create_db
-    await create_db()  # Создаём БД
-    config = Config()
-    bot = Bot(token=config.BOT_TOKEN)
-    dp = Dispatcher(storage=MemoryStorage())
-
-    register_middlewares(dp, config)
-    register_handlers(dp)
-    setup_scheduler(bot)  # Планировщик для напоминаний
-
     try:
+        config = Config()
+        bot = Bot(token=config.BOT_TOKEN)
+        dp = Dispatcher(storage=MemoryStorage())
+
+        # Инициализация остальных компонентов
+        from bot.handlers import router
+        dp.include_router(router)
+
+        print("Бот запущен!")
         await dp.start_polling(bot)
+
+    except Exception as e:
+        print(f"Ошибка: {e}")
     finally:
         await bot.session.close()
 

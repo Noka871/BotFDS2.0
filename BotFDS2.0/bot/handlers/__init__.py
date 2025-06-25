@@ -1,11 +1,12 @@
 # Регистрация всех обработчиков
-from .common import register_common_handlers
-from .admin import register_admin_handlers
-from .dubber import register_dubber_handlers
-from .timer import register_timer_handlers
+from aiogram import Router
+from .common import common_router
+from .admin import admin_router
+from .dubber import dubber_router
+from .timer import timer_router
 
-def register_handlers(dp):
-    register_common_handlers(dp)
-    register_admin_handlers(dp)
-    register_dubber_handlers(dp)
-    register_timer_handlers(dp)
+router = Router()
+router.include_router(common_router)
+router.include_router(admin_router)
+router.include_router(dubber_router)
+router.include_router(timer_router)

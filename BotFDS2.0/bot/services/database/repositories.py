@@ -29,3 +29,27 @@ async def process_role_selection(message: Message, state: FSMContext, session):
         reply_markup=menu_keyboard(role)
     )
     await state.clear()
+
+    from sqlalchemy import select
+    from sqlalchemy.ext.asyncio import AsyncSession
+    from .models import User, Title, Episode
+
+    class UserRepository:
+        def __init__(self, session: AsyncSession):
+            self.session = session
+
+        async def create_user(self, telegram_id: int, username: str, role: str):
+            user = User(telegram_id=telegram_id, username=username, role=role)
+            self.session.add(user)
+            await self.session.commit()
+            return user
+
+    class TitleRepository:
+        def __init__(self, session: AsyncSession):
+            self.session = session
+
+        async def create_title(self, name: str, episodes_count: int):
+            title = Title(name=name, episodes_count=episodes_count)
+            self.session.add(title)
+            await self.session.commit()
+            return title
