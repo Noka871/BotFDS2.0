@@ -2,18 +2,34 @@ BotFDS2.0/
 ├── bot/
 │   ├── __init__.py
 │   ├── main.py              # Точка входа
-│   ├── handlers/            # Обработчики команд
+│   ├── filters/             # Кастомные фильтры
+│   │   └── __init__.py
+│   ├── handlers/            # Обработчики сообщений
+│   │   ├── __init__.py      # Регистрация всех обработчиков
+│   │   ├── admin.py         # Админ-команды
+│   │   ├── common.py        # Общие обработчики
+│   │   ├── dubber.py        # Логика дабберов
+│   │   └── timer.py         # Логика таймеров
+│   ├── keyboards/           # Клавиатуры
 │   │   ├── __init__.py
-│   │   ├── admin.py
-│   │   ├── dubber.py
-│   │   ├── timer.py
-│   │   └── common.py
+│   │   ├── builders.py      # Построители клавиатур
+│   │   └── templates.py     # Шаблоны кнопок
 │   ├── middlewares/         # Промежуточное ПО
+│   │   ├── __init__.py
+│   │   └── throttling.py    # Антифлуд
 │   ├── services/            # Бизнес-логика
-│   │   ├── database.py
-│   │   ├── notifications.py
-│   │   └── reporting.py
-│   └── utils/               # Вспомогательные функции
+│   │   ├── __init__.py
+│   │   ├── database.py      # Работа с БД
+│   │   ├── notifications.py # Уведомления
+│   │   └── reporting.py     # Генерация отчетов
+│   ├── states/              # Состояния FSM
+│   │   └── __init__.py
+│   └── utils/               # Вспомогательные утилиты
+│       ├── __init__.py
+│       ├── scheduler.py     # Планировщик задач
+│       └── misc.py          # Разные утилиты
 ├── config.py                # Конфигурация
+├── .env                     # Переменные окружения
+├── .gitignore
 ├── requirements.txt
 └── README.md
