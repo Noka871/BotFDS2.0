@@ -8,23 +8,19 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import Config
+from bot.handlers import router
 
 
 async def main():
+    config = Config()
+    bot = Bot(token=config.BOT_TOKEN)
+    dp = Dispatcher(storage=MemoryStorage())
+
+    dp.include_router(router)
+
     try:
-        config = Config()
-        bot = Bot(token=config.BOT_TOKEN)
-        dp = Dispatcher(storage=MemoryStorage())
-
-        # Инициализация остальных компонентов
-        from bot.handlers import router
-        dp.include_router(router)
-
         print("Бот запущен!")
         await dp.start_polling(bot)
-
-    except Exception as e:
-        print(f"Ошибка: {e}")
     finally:
         await bot.session.close()
 
