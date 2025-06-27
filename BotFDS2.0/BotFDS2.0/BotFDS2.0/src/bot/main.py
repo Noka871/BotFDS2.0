@@ -1,4 +1,5 @@
 # Точка входа
+import sys
 from pathlib import Path
 import logging
 import asyncio
@@ -8,10 +9,10 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from src.bot.database import Database
-from src.bot.config import config
+from .database import Database
+from .config import config
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+sys.path.append(str(Path(__file__).parent.parent.parent))
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
