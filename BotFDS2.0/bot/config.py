@@ -1,16 +1,10 @@
-"""
-Конфигурационный файл бота
-Здесь хранятся токены, ID администраторов и другие настройки
-"""
+import os
+from dotenv import load_dotenv
 
-# Токен вашего Telegram бота (получить у @BotFather)
-BOT_TOKEN = "ВАШ_ТОКЕН_БОТА"
+load_dotenv()
 
-# Список ID администраторов (можно узнать у @userinfobot)
-ADMIN_IDS = [123456789] 
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Токен из .env
+ADMIN_IDS = [123456789]             # ID админов (можно несколько)
 
-# Настройки базы данных
-DB_NAME = "dubbing.db"  # Имя файла базы данных SQLite
-
-# Время ежедневных напоминаний (UTC)
-REMINDER_TIME_HOUR = 7  # 10:00 по МСК (UTC+3)
+# Путь к базе данных
+DB_PATH = "database.db"
