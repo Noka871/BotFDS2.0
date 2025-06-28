@@ -1,31 +1,19 @@
+# Клавиатуры
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-# Клавиатура выбора роли
-def get_role_keyboard():
+
+def get_main_menu(role: str = "user"):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add(
-        KeyboardButton("Даббер"),
-        KeyboardButton("Таймер"),
-        KeyboardButton("Админ")
-    )
+
+    if role == "admin":
+        markup.add(KeyboardButton("Выгрузить отчет"))
+        markup.add(KeyboardButton("Рассылка"))
+
+    markup.add(KeyboardButton("Помощь"))
     return markup
 
-# Клавиатура даббера
-def get_dubber_keyboard():
+def get_admin_menu():
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add(
-        KeyboardButton("Выбрать тайтл"),
-        KeyboardButton("Мои долги"),
-        KeyboardButton("Вернуться в меню")
-    )
-    return markup
-
-# Клавиатура таймера
-def get_timer_keyboard():
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    markup.add(
-        KeyboardButton("Создать тайтл"),
-        KeyboardButton("Просмотреть график"),
-        KeyboardButton("Вернуться в меню")
-    )
+    markup.row("Выгрузить отчет", "Рассылка")
+    markup.row("Помощь", "Назад")
     return markup
