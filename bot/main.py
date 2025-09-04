@@ -1,60 +1,74 @@
+import os
 import logging
+from dotenv import load_dotenv
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
-from config import BOT_TOKEN
 from database.database import Database
-from handlers.common import start_handler, menu_handler
-from handlers.dubber import dubber_menu_handler, select_title_handler
-from handlers.timer import timer_menu_handler, create_title_handler
-from utils.notifications import NotificationManager
 
-# Настройка логгирования
+# Настройка логирования
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
+# Загрузка переменных окружения ДО их использования
+load_dotenv()
+
+# Теперь определяем переменные ПОСЛЕ загрузки .env
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+ADMIN_ID = os.getenv('ADMIN_ID')
+CHANNEL_ID = os.getenv('CHANNEL_ID')
+
+# Проверка, что токен загружен
+if not BOT_TOKEN:
+    logger.error("BOT_TOKEN не найден! Проверьте файл .env")
+    exit(1)
+
+
 class DubbingBot:
     def __init__(self, token: str):
-        self.updater = Updater(token=token, use_context=True)
+        self.application = Application.builder().token(token).build()
         self.db = Database()
-        self.dispatcher = self.updater.dispatcher
+        self.setup_handlers()
 
-        # Регистрация обработчиков
-        self._register_handlers()
+    def setup_handlers(self):
+        """Настройка обработчиков команд"""
+        self.application.add_handler(CommandHandler("start", self.start_command))
+        self.application.add_handler(CommandHandler("help", self.help_command))
+        # Добавьте другие обработчики здесь
 
-    def _register_handlers(self):
-        # Общие обработчики
-        self.dispatcher.add_handler(CommandHandler('start', start_handler))
-        self.dispatcher.add_handler(CommandHandler('menu', menu_handler))
+    async def start_command(self, update, context):
+        """Обработчик команды /start"""
+        user = update.effective_user
+        await update.message.reply_text(f"Привет, {user.first_name}! Я бот для дубляжа.")
 
-        # Обработчики для дабберов
-        self.dispatcher.add_handler(CallbackQueryHandler(dubber_menu_handler, pattern='^dubber_'))
-        self.dispatcher.add_handler(CallbackQueryHandler(select_title_handler, pattern='^select_title_'))
+        # Добавляем пользователя в базу данных
+        self.db.add_user(
+            user_id=user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name
+        )
 
-        # Обработчики для таймеров
-        self.dispatcher.add_handler(CallbackQueryHandler(timer_menu_handler, pattern='^timer_'))
-        self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, create_title_handler))
-
-        # Обработка ошибок
-        self.dispatcher.add_error_handler(self.error_handler)
-
-    def error_handler(self, update, context):
-        logger.error(f'Update {update} caused error {context.error}')
-        if update and update.message:
-            update.message.reply_text('Произошла ошибка. Пожалуйста, попробуйте позже.')
+    async def help_command(self, update, context):
+        """Обработчик команды /help"""
+        await update.message.reply_text("Это помощь по боту!")
 
     def run(self):
-        self.updater.start_polling()
-        self.updater.idle()
+        """Запуск бота"""
+        logger.info("Бот запускается...")
+        self.application.run_polling()
 
-    class DubbingBot:
-     def __init__(self, token: str):
-        self.updater = Updater(token=token, use_context=True)
-        self.db = Database()
-        self.notifier = NotificationManager(token)  # Добавляем менеджер уведомлений
-        self.notifier.start_daily_notifications()  # Запускаем фоновые уведомления
 
-if __name__ == '__main__':
-    bot = DubbingBot(BOT_TOKEN)
-    bot.run()
+# Главная функция
+def main():
+    try:
+        # Создаем и запускаем бота
+        bot = DubbingBot(BOT_TOKEN)
+        bot.run()
+    except Exception as e:
+        logger.error(f"Ошибка при запуске бота: {e}")
+
+
+if __name__ == "__main__":
+    main()
