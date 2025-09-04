@@ -1,7 +1,7 @@
 import logging
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from config import BOT_TOKEN
-from database import Database
+from database.database import Database
 from handlers.common import start_handler, menu_handler
 from handlers.dubber import dubber_menu_handler, select_title_handler
 from handlers.timer import timer_menu_handler, create_title_handler
