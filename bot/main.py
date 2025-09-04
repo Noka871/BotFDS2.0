@@ -40,12 +40,17 @@ class DubbingBot:
         self.application.add_handler(CommandHandler("menu", self.menu_command))
 
         # Обработчики нажатий на inline-кнопки
-        # pattern="^role_" - ловит все callback_data начинающиеся с "role_"
         self.application.add_handler(CallbackQueryHandler(self.role_callback, pattern="^role_"))
-        # pattern="^menu_" - ловит все callback_data начинающиеся с "menu_"
         self.application.add_handler(CallbackQueryHandler(self.menu_callback, pattern="^menu_"))
+        self.application.add_handler(CallbackQueryHandler(self.title_callback, pattern="^title_"))
+        self.application.add_handler(CallbackQueryHandler(self.episode_callback, pattern="^episode_"))
+        self.application.add_handler(CallbackQueryHandler(self.submit_callback, pattern="^submit_"))
+        self.application.add_handler(CallbackQueryHandler(self.edit_callback, pattern="^edit_"))
 
-        # Обработчик обычных текстовых сообщений (не команд)
+        # Обработчик для всех остальных callback_data
+        self.application.add_handler(CallbackQueryHandler(self.unknown_callback))
+
+        # Обработчик обычных текстовых сообщений
         self.application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, self.handle_message))
 
     async def start_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -58,40 +63,31 @@ class DubbingBot:
             user_id=user.id,
             username=user.username,
             first_name=user.first_name,
-            last_name=user.last_name or ""  # Если нет фамилии - пустая строка
+            last_name=user.last_name or ""
         )
 
-        # СОЗДАЕМ ИНЛАЙН-КЛАВИАТУРУ с кнопками выбора роли
+        # Создаем инлайн-клавиатуру с кнопками выбора роли
         keyboard = [
-            # Первый ряд кнопок
-            [
-                InlineKeyboardButton("🎤 Даббер", callback_data="role_dubber"),
-                InlineKeyboardButton("🎧 Таймер", callback_data="role_timer")
-            ],
-            # Второй ряд кнопок
-            [
-                InlineKeyboardButton("👑 Админ", callback_data="role_admin")
-            ]
+            [InlineKeyboardButton("🎤 Даббер", callback_data="role_dubber")],
+            [InlineKeyboardButton("🎧 Таймер", callback_data="role_timer")],
+            [InlineKeyboardButton("👑 Админ", callback_data="role_admin")]
         ]
 
-        # Преобразуем клавиатуру в разметку
         reply_markup = InlineKeyboardMarkup(keyboard)
 
         # Отправляем сообщение с inline-кнопками
         await update.message.reply_text(
             f"Привет, {user.first_name}! Выбери свою роль:",
-            reply_markup=reply_markup  # Важно: передаем клавиатуру здесь
+            reply_markup=reply_markup
         )
 
     async def role_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Обработчик нажатия на кнопку выбора роли"""
         query = update.callback_query
-        # Подтверждаем получение callback (убирает "часики" на кнопке)
-        await query.answer()
+        await query.answer()  # Убираем "часики" на кнопке
 
         user = query.from_user
-        # Извлекаем роль из callback_data (убираем префикс "role_")
-        role = query.data.replace("role_", "")
+        role = query.data.replace("role_", "")  # Извлекаем роль из callback_data
 
         logger.info(f"User {user.id} selected role: {role}")
 
@@ -101,7 +97,7 @@ class DubbingBot:
         # Получаем человеко-читаемое название роли
         role_name = self.get_role_name(role)
 
-        # РЕДАКТИРУЕМ исходное сообщение с новым текстом
+        # Редактируем исходное сообщение с новым текстом
         await query.edit_message_text(
             text=f"✅ Роль '{role_name}' успешно установлена!\n\n"
                  f"Теперь используйте команду /menu для доступа к функциям."
@@ -132,8 +128,79 @@ class DubbingBot:
             await self.show_user_debts(update, user.id)
         elif action == "add_timer_role":
             await self.add_timer_role(update, user.id)
+        elif action == "create_title":
+            await query.edit_message_text("📝 Введите название тайтла:")
+        elif action == "edit_title":
+            await self.show_titles_for_editing(update, user.id)
+        elif action == "schedule":
+            await self.show_schedule(update, user.id)
+        elif action == "broadcast":
+            await query.edit_message_text("📨 Введите сообщение для рассылки:")
+        elif action == "warnings":
+            await self.show_warnings(update, user.id)
+        elif action == "export":
+            await self.export_report(update, user.id)
         else:
             await query.edit_message_text("🛠️ Эта функция в разработке")
+
+    async def title_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Обработчик выбора тайтла"""
+        query = update.callback_query
+        await query.answer()
+
+        title_id = query.data.replace("title_", "")
+        user = query.from_user
+
+        logger.info(f"User {user.id} selected title: {title_id}")
+
+        # Получаем информацию о тайтле из базы данных
+        title_data = self.db.get_title(title_id)
+        if title_data:
+            title_name = title_data[1]  # Название тайтла
+            await query.edit_message_text(f"📀 Выбран тайтл: {title_name}")
+        else:
+            await query.edit_message_text("❌ Тайтл не найден!")
+
+    async def episode_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Обработчик выбора серии"""
+        query = update.callback_query
+        await query.answer()
+
+        episode_data = query.data.replace("episode_", "")
+        user = query.from_user
+
+        logger.info(f"User {user.id} selected episode: {episode_data}")
+        await query.edit_message_text(f"🎬 Выбрана серия: {episode_data}")
+
+    async def submit_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Обработчик отправки статуса"""
+        query = update.callback_query
+        await query.answer()
+
+        submit_data = query.data.replace("submit_", "")
+        user = query.from_user
+
+        logger.info(f"User {user.id} submitted: {submit_data}")
+        await query.edit_message_text(f"✅ Статус отправлен: {submit_data}")
+
+    async def edit_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Обработчик редактирования"""
+        query = update.callback_query
+        await query.answer()
+
+        edit_data = query.data.replace("edit_", "")
+        user = query.from_user
+
+        logger.info(f"User {user.id} editing: {edit_data}")
+        await query.edit_message_text(f"✏️ Редактирование: {edit_data}")
+
+    async def unknown_callback(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
+        """Обработчик неизвестных callback_data"""
+        query = update.callback_query
+        await query.answer()
+
+        logger.warning(f"Unknown callback data: {query.data}")
+        await query.edit_message_text("❌ Неизвестная команда")
 
     async def show_user_debts(self, update: Update, user_id: int):
         """Показывает долги пользователя"""
@@ -153,6 +220,42 @@ class DubbingBot:
         query = update.callback_query
         self.db.update_user_role(user_id, "timer")
         await query.edit_message_text("✅ Вам выданы права таймера! Используйте /menu")
+
+    async def show_titles_for_editing(self, update: Update, user_id: int):
+        """Показывает тайтлы для редактирования"""
+        query = update.callback_query
+        titles = self.db.get_user_titles(user_id)
+
+        if not titles:
+            await query.edit_message_text("📭 У вас нет тайтлов для редактирования.")
+            return
+
+        keyboard = []
+        for title in titles:
+            keyboard.append([InlineKeyboardButton(f"✏️ {title[1]}", callback_data=f"edit_{title[0]}")])
+
+        keyboard.append([InlineKeyboardButton("🔙 Назад", callback_data="menu_back")])
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
+        await query.edit_message_text(
+            "📝 Выберите тайтл для редактирования:",
+            reply_markup=reply_markup
+        )
+
+    async def show_schedule(self, update: Update, user_id: int):
+        """Показывает график сдач"""
+        query = update.callback_query
+        await query.edit_message_text("📊 График сдач:\n\nДанные загружаются...")
+
+    async def show_warnings(self, update: Update, user_id: int):
+        """Показывает предупреждения"""
+        query = update.callback_query
+        await query.edit_message_text("⚠️ Предупреждения:\n\nНет новых предупреждений")
+
+    async def export_report(self, update: Update, user_id: int):
+        """Выгружает отчет"""
+        query = update.callback_query
+        await query.edit_message_text("📊 Отчет:\n\nФункция в разработке")
 
     async def help_command(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         """Обработчик команды /help"""
@@ -249,7 +352,7 @@ class DubbingBot:
 
         reply_markup = InlineKeyboardMarkup(keyboard)
 
-        # РЕДАКТИРУЕМ существующее сообщение
+        # Редактируем существующее сообщение
         await query.edit_message_text(
             text=f"🎮 Главное меню ({self.get_role_name(role)})\nВыберите действие:",
             reply_markup=reply_markup
