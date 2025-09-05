@@ -1,48 +1,65 @@
 """
 Общие обработчики команд (/start, /help, /menu)
 """
-from telegram import Update
-from telegram.ext import CallbackContext
-from database import Database
-from utils.keyboards import get_main_menu_keyboard
+from aiogram import F, Router
+from aiogram.types import Message
+from aiogram.filters import Command
+from aiogram.fsm.context import FSMContext
 
-def start_handler(update: Update, context: CallbackContext):
+from keyboards import get_main_menu_keyboard
+
+router = Router()
+
+
+@router.message(Command("start"))
+async def cmd_start(message: Message, state: FSMContext):
     """Обработчик команды /start"""
-    user = update.effective_user
-    db = Database()
-    
-    # Регистрация пользователя в системе
-    db.add_user(
-        user_id=user.id,
-        username=user.username,
-        first_name=user.first_name,
-        last_name=user.last_name,
-        role='dubber'  # По умолчанию роль даббера
-    )
-    
-    # Отправка приветственного сообщения
-    update.message.reply_text(
-        f"Привет, {user.first_name}!\n"
-        "Я бот для учета сдачи аудиодорожек.\n"
-        "Пожалуйста, выбери свою роль:",
-        reply_markup=get_main_menu_keyboard()
+    await state.clear()
+
+    welcome_text = (
+        "🎬 <b>Добро пожаловать в систему отчетности дубляжа!</b>\n\n"
+        "Здесь вы можете:\n"
+        "• 📝 Отмечать сданные серии\n"
+        "• ⏰ Получать уведомления о дедлайнах\n"
+        "• 📊 Следить за своими задачами\n"
+        "• 🚀 Узнавать о выходе новых меток\n\n"
+        "Используйте кнопки меню для навигации:"
     )
 
-def menu_handler(update: Update, context: CallbackContext):
+    await message.answer(welcome_text, reply_markup=get_main_menu_keyboard())
+
+
+@router.message(Command("menu"))
+async def cmd_menu(message: Message):
     """Обработчик команды /menu"""
-    user = update.effective_user
-    update.message.reply_text(
-        "Главное меню:",
-        reply_markup=get_main_menu_keyboard()
-    )
+    await message.answer("📋 <b>Главное меню</b>", reply_markup=get_main_menu_keyboard())
 
-def help_handler(update: Update, context: CallbackContext):
+
+@router.message(Command("help"))
+async def cmd_help(message: Message):
     """Обработчик команды /help"""
     help_text = (
-        "📌 Доступные команды:\n"
-        "/start - Начало работы с ботом\n"
-        "/menu - Главное меню\n"
-        "/help - Справка\n\n"
-        "Если у вас возникли проблемы, обратитесь к администратору."
+        "🤖 <b>Помощь по боту</b>\n\n"
+        "• /start - Запустить бота\n"
+        "• /menu - Главное меню\n"
+        "• /help - Эта справка\n\n"
+        "🎭 <b>Для дабберов:</b>\n"
+        "• Выбрать тайтл - отметить сдачу серии\n"
+        "• Мои долги - посмотреть текущие задачи\n"
+        "• Форс-мажор - сообщить о проблеме\n\n"
+        "⏰ <b>Для таймеров:</b>\n"
+        "• Создать тайтл - добавить новый проект\n"
+        "• Редактировать тайтл - изменить параметры\n"
+        "• Рассылка - отправить уведомление\n\n"
+        "👨‍💼 <b>Для админов:</b>\n"
+        "• Выгрузить отчет - получить статистики\n"
+        "• Глобальная рассылка - уведомить всех\n"
     )
-    update.message.reply_text(help_text)
+
+    await message.answer(help_text)
+
+
+@router.message(F.text == "🔙 Вернуться в меню")
+async def back_to_menu(message: Message):
+    """Возврат в главное меню"""
+    await cmd_menu(message)

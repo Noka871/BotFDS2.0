@@ -1,142 +1,214 @@
 """
 Обработчики для функционала даббера
 """
-from telegram import Update
-from telegram.ext import CallbackContext, ConversationHandler, MessageHandler, Filters
-from database import Database
-from utils.keyboards import get_dubber_menu_keyboard, get_titles_keyboard, get_episode_status_keyboard
+from aiogram import F, Router
+from aiogram.types import Message, CallbackQuery
+from aiogram.filters import Command, StateFilter
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
-# Состояния для ConversationHandler
-SELECT_TITLE, SELECT_EPISODE, EPISODE_STATUS, FORCE_MAJEURE = range(4)
+from keyboards import (
+    get_title_selection_keyboard,
+    get_episode_status_keyboard,
+    get_confirmation_keyboard
+)
+from models.database import AsyncSessionLocal, Title, UserTitle, Report
+from utils.helpers import get_user_titles, get_user_by_id
+from utils.states import DubberStates
 
-def dubber_menu_handler(update: Update, context: CallbackContext):
-    """Обработчик меню даббера"""
-    query = update.callback_query
-    query.answer()
-    
-    query.edit_message_text(
-        text="📌 Меню даббера:",
-        reply_markup=get_dubber_menu_keyboard()
-    )
+router = Router()
 
-def select_title_start(update: Update, context: CallbackContext):
-    """Начало выбора тайтла для отметки сдачи"""
-    query = update.callback_query
-    query.answer()
-    
-    db = Database()
-    titles = db.get_dubber_titles(update.effective_user.id)
-    
-    if not titles:
-        query.edit_message_text("У вас нет назначенных тайтлов.")
-        return ConversationHandler.END
-    
-    query.edit_message_text(
-        text="Выберите тайтл:",
-        reply_markup=get_titles_keyboard(titles, 'dubber_title')
-    )
-    return SELECT_TITLE
 
-def select_title(update: Update, context: CallbackContext):
-    """Обработка выбора тайтла"""
-    query = update.callback_query
-    query.answer()
-    
-    title_id = int(query.data.split('_')[-1])
-    context.user_data['current_title'] = title_id
-    
-    query.edit_message_text("Введите номер серии:")
-    return SELECT_EPISODE
+class ReportStates(StatesGroup):
+    selecting_title = State()
+    selecting_episode = State()
+    reporting_status = State()
+    adding_comment = State()
 
-def select_episode(update: Update, context: CallbackContext):
-    """Обработка номера серии"""
+
+@router.message(F.text == "🎭 Выбрать тайтл")
+async def select_title(message: Message, state: FSMContext):
+    """Обработчик выбора тайтла"""
+    async with AsyncSessionLocal() as session:
+        user = await get_user_by_id(session, message.from_user.id)
+        if not user:
+            await message.answer("❌ Сначала зарегистрируйтесь с помощью /start")
+            return
+
+        user_titles = await get_user_titles(session, user.user_id)
+
+        if not user_titles:
+            await message.answer("🎭 У вас нет доступных тайтлов.")
+            return
+
+        # Преобразуем в список названий для клавиатуры
+        title_names = [title.name for title in user_titles]
+        keyboard = get_title_selection_keyboard(title_names)
+
+        await message.answer("🎬 Выберите тайтл:", reply_markup=keyboard)
+        await state.set_state(ReportStates.selecting_title)
+
+
+@router.callback_query(F.data.startswith("select_title:"))
+async def process_title_selection(callback: CallbackQuery, state: FSMContext):
+    """Обработчик выбора конкретного тайтла"""
+    title_name = callback.data.split(":")[1]
+
+    async with AsyncSessionLocal() as session:
+        # Находим тайтл в базе
+        result = await session.execute(select(Title).where(Title.name == title_name))
+        title = result.scalar_one_or_none()
+
+        if title:
+            await state.update_data(selected_title_id=title.id, selected_title_name=title.name)
+            await callback.message.edit_text(
+                f"🎬 Выбран тайтл: <b>{title.name}</b>\n"
+                f"📺 Текущая серия: {title.current_episode}\n"
+                f"📊 Всего серий: {title.total_episodes}\n\n"
+                f"Введите номер серии для отчета:"
+            )
+            await state.set_state(ReportStates.selecting_episode)
+        else:
+            await callback.message.edit_text("❌ Тайтл не найден в базе данных.")
+
+    await callback.answer()
+
+
+@router.message(ReportStates.selecting_episode)
+async def process_episode_selection(message: Message, state: FSMContext):
+    """Обработчик выбора серии"""
     try:
-        episode_number = int(update.message.text)
-        if episode_number <= 0:
-            raise ValueError
-        
-        context.user_data['current_episode'] = episode_number
-        update.message.reply_text(
-            "Выберите статус:",
-            reply_markup=get_episode_status_keyboard()
-        )
-        return EPISODE_STATUS
+        episode = int(message.text)
+        data = await state.get_data()
+
+        async with AsyncSessionLocal() as session:
+            # Проверяем валидность номера серии
+            result = await session.execute(select(Title).where(Title.id == data['selected_title_id']))
+            title = result.scalar_one_or_none()
+
+            if not title:
+                await message.answer("❌ Тайтл не найден.")
+                return
+
+            if episode < 1 or episode > title.total_episodes:
+                await message.answer(f"❌ Неверный номер серии. Допустимо от 1 до {title.total_episodes}.")
+                return
+
+            await state.update_data(selected_episode=episode)
+            await message.answer(
+                f"📺 Серия {episode} тайтла <b>{title.name}</b>\n"
+                f"Выберите статус:",
+                reply_markup=get_episode_status_keyboard()
+            )
+            await state.set_state(ReportStates.reporting_status)
+
     except ValueError:
-        update.message.reply_text("Некорректный номер серии. Введите целое положительное число:")
-        return SELECT_EPISODE
+        await message.answer("❌ Пожалуйста, введите корректный номер серии.")
 
-def episode_status(update: Update, context: CallbackContext):
-    """Обработка статуса серии"""
-    query = update.callback_query
-    query.answer()
-    
-    status = query.data.split('_')[-1]
-    title_id = context.user_data['current_title']
-    episode_number = context.user_data['current_episode']
-    user_id = update.effective_user.id
-    
-    db = Database()
-    
-    if status == 'completed':
-        db.set_episode_status(title_id, episode_number, user_id, 'completed')
-        message = "✅ Серия отмечена как сданная!"
-    elif status == 'delayed':
-        db.set_episode_status(title_id, episode_number, user_id, 'delayed')
-        message = "⚠️ Вы отметили задержку сдачи. Пожалуйста, укажите причину:"
-        query.edit_message_text(message)
-        return FORCE_MAJEURE
-    else:  # cancel
-        message = "Действие отменено."
-    
-    query.edit_message_text(
-        text=message + "\n\nХотите отметить еще одну серию?",
-        reply_markup=get_dubber_menu_keyboard()
+
+@router.callback_query(F.data.startswith("episode:"))
+async def process_episode_status(callback: CallbackQuery, state: FSMContext):
+    """Обработчик статуса серии"""
+    status = callback.data.split(":")[1]
+    data = await state.get_data()
+
+    if status == "submitted":
+        # Сохраняем отчет о сдаче
+        async with AsyncSessionLocal() as session:
+            user = await get_user_by_id(session, callback.from_user.id)
+
+            report = Report(
+                user_id=user.id,
+                title_id=data['selected_title_id'],
+                episode=data['selected_episode'],
+                status="submitted",
+                submitted_at=datetime.utcnow()
+            )
+            session.add(report)
+            await session.commit()
+
+        await callback.message.edit_text(
+            "✅ <b>Спасибо за предоставленную информацию!</b>\n\n"
+            "Серия отмечена как сданная.\n"
+            "Хотите добавить еще серию?",
+            reply_markup=get_confirmation_keyboard()
+        )
+
+    elif status == "delayed":
+        await callback.message.edit_text(
+            "⚠️ <b>Сообщение о задержке</b>\n\n"
+            "Пожалуйста, укажите причину задержки:"
+        )
+        await state.set_state(ReportStates.adding_comment)
+
+
+@router.message(ReportStates.adding_comment)
+async def process_delay_comment(message: Message, state: FSMContext):
+    """Обработчик комментария о задержке"""
+    data = await state.get_data()
+
+    async with AsyncSessionLocal() as session:
+        user = await get_user_by_id(session, message.from_user.id)
+
+        report = Report(
+            user_id=user.id,
+            title_id=data['selected_title_id'],
+            episode=data['selected_episode'],
+            status="delayed",
+            comment=message.text,
+            submitted_at=datetime.utcnow()
+        )
+        session.add(report)
+        await session.commit()
+
+    await message.answer(
+        "✅ <b>Информация о задержке сохранена!</b>\n\n"
+        "Ваша ситуация записана. Таймер будет уведомлен.\n"
+        "Хотите добавить еще серию?",
+        reply_markup=get_confirmation_keyboard()
     )
-    return ConversationHandler.END
 
-def force_majeure_reason(update: Update, context: CallbackContext):
-    """Обработка причины задержки (форс-мажора)"""
-    reason = update.message.text
-    user_id = update.effective_user.id
-    
-    db = Database()
-    db.add_force_majeure(user_id, reason)
-    
-    update.message.reply_text(
-        "Ваше сообщение о форс-мажоре сохранено. Спасибо!",
-        reply_markup=get_dubber_menu_keyboard()
-    )
-    return ConversationHandler.END
 
-def cancel_dubber_actions(update: Update, context: CallbackContext):
-    """Отмена действий даббера"""
-    update.message.reply_text(
-        "Действие отменено.",
-        reply_markup=get_dubber_menu_keyboard()
-    )
-    return ConversationHandler.END
+@router.callback_query(F.data.startswith("confirm:"))
+async def process_add_more(callback: CallbackQuery, state: FSMContext):
+    """Обработчик подтверждения добавления еще одной серии"""
+    confirm = callback.data.split(":")[1]
 
-# Создание ConversationHandler для даббера
-dubber_conv_handler = ConversationHandler(
-    entry_points=[
-        CallbackQueryHandler(select_title_start, pattern='^dubber_select_title$')
-    ],
-    states={
-        SELECT_TITLE: [
-            CallbackQueryHandler(select_title, pattern='^dubber_title_')
-        ],
-        SELECT_EPISODE: [
-            MessageHandler(Filters.text & ~Filters.command, select_episode)
-        ],
-        EPISODE_STATUS: [
-            CallbackQueryHandler(episode_status, pattern='^status_')
-        ],
-        FORCE_MAJEURE: [
-            MessageHandler(Filters.text & ~Filters.command, force_majeure_reason)
-        ]
-    },
-    fallbacks=[
-        CommandHandler('cancel', cancel_dubber_actions),
-        MessageHandler(Filters.command, cancel_dubber_actions)
-    ]
-)ы
+    if confirm == "yes":
+        await callback.message.edit_text("🎭 Выберите тайтл:")
+        await select_title(callback.message, state)
+    else:
+        await callback.message.edit_text("✅ Отчеты сохранены. Возврат в меню.")
+        await state.clear()
+
+    await callback.answer()
+
+
+@router.message(F.text == "📋 Мои долги")
+async def show_debts(message: Message):
+    """Показать долги даббера"""
+    async with AsyncSessionLocal() as session:
+        user = await get_user_by_id(session, message.from_user.id)
+        if not user:
+            await message.answer("❌ Сначала зарегистрируйтесь с помощью /start")
+            return
+
+        user_titles = await get_user_titles(session, user.user_id)
+
+        if not user_titles:
+            await message.answer("🎭 У вас нет активных тайтлов.")
+            return
+
+        debts_text = "📋 <b>Ваши текущие задачи:</b>\n\n"
+
+        for title in user_titles:
+            # Здесь будет логика определения несданных серий
+            debts_text += f"🎬 <b>{title.name}</b>\n"
+            debts_text += f"📺 Текущая серия: {title.current_episode}\n"
+            debts_text += f"⏰ Статус: В процессе\n\n"
+
+        debts_text += "💡 Это демо-данные. Реальные данные будут из базы данных."
+
+        await message.answer(debts_text)
