@@ -1,102 +1,107 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text
-from sqlalchemy.orm import relationship, declarative_base
-from datetime import datetime, timedelta
-import uuid
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text, Boolean, Float
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from datetime import datetime
 
 Base = declarative_base()
 
 
 class User(Base):
-    __tablename__ = "users"
+    """Модель пользователя системы"""
+    __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, unique=True, nullable=False)
-    username = Column(String(100))
-    full_name = Column(String(100))
-    role = Column(String(20), default="dubber")  # dubber, timer, admin
-    created_at = Column(DateTime, default=datetime.utcnow)
+    username = Column(String, nullable=True)  # username может быть None
+    role = Column(String, default='dubber')  # Роль: dubber, timer, admin
+    created_at = Column(DateTime, default=datetime.now)
 
-    # Связи
-    titles = relationship("UserTitle", back_populates="user")
-    reports = relationship("Report", back_populates="user")
-    penalties = relationship("Penalty", back_populates="user")
-    notifications = relationship("Notification", back_populates="user")
+    # Связи с другими таблицами
+    created_titles = relationship("Title", back_populates="creator")
+    dubber_titles = relationship("DubberTitle", back_populates="dubber")
+    reports = relationship("Report", back_populates="dubber")
+    force_majeures = relationship("ForceMajeure", back_populates="user")
+    penalties = relationship("Penalty", foreign_keys="Penalty.dubber_id", back_populates="dubber")
+    created_penalties = relationship("Penalty", foreign_keys="Penalty.created_by", back_populates="creator")
 
 
 class Title(Base):
-    __tablename__ = "titles"
+    """Модель тайтла (аниме/сериала)"""
+    __tablename__ = 'titles'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    total_episodes = Column(Integer, default=0)
-    current_episode = Column(Integer, default=1)
-    timer_id = Column(Integer, ForeignKey("users.id"))
-    created_at = Column(DateTime, default=datetime.utcnow)
-    marks_ready_at = Column(DateTime)
+    name = Column(String, nullable=False)  # Название тайтла
+    total_episodes = Column(Integer, default=0)  # Общее количество серий
+    current_episode = Column(Integer, default=0)  # Текущая серия
+    created_by = Column(Integer, ForeignKey('users.id'))  # ID создателя
+    created_at = Column(DateTime, default=datetime.now)
 
     # Связи
-    users = relationship("UserTitle", back_populates="title")
+    creator = relationship("User", back_populates="created_titles")
+    dubber_titles = relationship("DubberTitle", back_populates="title")
     reports = relationship("Report", back_populates="title")
     penalties = relationship("Penalty", back_populates="title")
-    notifications = relationship("Notification", back_populates="title")
 
 
-class UserTitle(Base):
-    __tablename__ = "user_titles"
+class DubberTitle(Base):
+    """Связующая таблица между дабберами и тайтлами"""
+    __tablename__ = 'dubber_titles'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    title_id = Column(Integer, ForeignKey("titles.id"))
+    dubber_id = Column(Integer, ForeignKey('users.id'))  # ID даббера
+    title_id = Column(Integer, ForeignKey('titles.id'))  # ID тайтла
+    assigned_at = Column(DateTime, default=datetime.now)  # Время назначения
 
     # Связи
-    user = relationship("User", back_populates="titles")
-    title = relationship("Title", back_populates="users")
+    dubber = relationship("User", back_populates="dubber_titles")
+    title = relationship("Title", back_populates="dubber_titles")
 
 
 class Report(Base):
-    __tablename__ = "reports"
+    """Модель отчета о сдаче серии"""
+    __tablename__ = 'reports'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    title_id = Column(Integer, ForeignKey("titles.id"))
-    episode = Column(Integer, nullable=False)
-    status = Column(String(20))  # submitted, delayed
-    comment = Column(Text)
-    submitted_at = Column(DateTime, default=datetime.utcnow)
-    deadline = Column(DateTime)
+    dubber_id = Column(Integer, ForeignKey('users.id'))  # ID даббера
+    title_id = Column(Integer, ForeignKey('titles.id'))  # ID тайтла
+    episode = Column(Integer)  # Номер серии
+    status = Column(String, default='pending')  # Статус: pending, submitted, delayed
+    comment = Column(Text, nullable=True)  # Комментарий при задержке
+    submitted_at = Column(DateTime, nullable=True)  # Время сдачи
+    deadline = Column(DateTime, nullable=True)  # Дедлайн сдачи
+    created_at = Column(DateTime, default=datetime.now)  # Время создания отчета
 
     # Связи
-    user = relationship("User", back_populates="reports")
+    dubber = relationship("User", back_populates="reports")
     title = relationship("Title", back_populates="reports")
 
 
+class ForceMajeure(Base):
+    """Модель уведомления о форс-мажоре"""
+    __tablename__ = 'force_majeure'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))  # ID пользователя
+    message = Column(Text, nullable=False)  # Сообщение о форс-мажоре
+    created_at = Column(DateTime, default=datetime.now)  # Время создания
+
+    # Связи
+    user = relationship("User", back_populates="force_majeures")
+
+
 class Penalty(Base):
-    __tablename__ = "penalties"
+    """Модель штрафа за просрочку сдачи"""
+    __tablename__ = 'penalties'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    title_id = Column(Integer, ForeignKey("titles.id"))
-    episode = Column(Integer)
-    amount = Column(Integer, default=0)
-    reason = Column(Text)
-    created_by = Column(Integer, ForeignKey("users.id"))
-    created_at = Column(DateTime, default=datetime.utcnow)
+    dubber_id = Column(Integer, ForeignKey('users.id'))  # ID даббера
+    title_id = Column(Integer, ForeignKey('titles.id'))  # ID тайтла
+    episode = Column(Integer)  # Номер серии
+    amount = Column(Float, default=0)  # Сумма штрафа
+    reason = Column(Text, nullable=True)  # Причина штрафа
+    created_by = Column(Integer, ForeignKey('users.id'))  # ID создателя штрафа
+    created_at = Column(DateTime, default=datetime.now)  # Время создания штрафа
 
     # Связи
-    user = relationship("User", back_populates="penalties")
+    dubber = relationship("User", foreign_keys=[dubber_id], back_populates="penalties")
     title = relationship("Title", back_populates="penalties")
-
-
-class Notification(Base):
-    __tablename__ = "notifications"
-
-    id = Column(Integer, primary_key=True)
-    from_user_id = Column(Integer, ForeignKey("users.id"))
-    title_id = Column(Integer, ForeignKey("titles.id"), nullable=True)
-    message = Column(Text)
-    type = Column(String(20))  # marks_ready, force_majeure, broadcast
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-    # Связи
-    user = relationship("User", back_populates="notifications")
-    title = relationship("Title", back_populates="notifications")
+    creator = relationship("User", foreign_keys=[created_by], back_populates="created_penalties")
