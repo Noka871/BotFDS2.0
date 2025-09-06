@@ -4,6 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.types import BotCommand
 from aiogram.client.default import DefaultBotProperties
+
 from config import BOT_TOKEN
 from handlers.common import router as common_router
 from handlers.dubber import router as dubber_router
