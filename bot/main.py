@@ -1,47 +1,63 @@
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.fsm.storage.memory import MemoryStorage
+from dotenv import load_dotenv
+import os
 
-from config import BOT_TOKEN
+from .logger import setup_logger, logger
+from .database.init_db import init_database
+from .database.db import close_db_connection
+from .error_handler import register_error_handlers
+from .utils.notifications import start_notification_scheduler
 
-# Импорты обработчиков для aiogram 2.x
-from handlers.common import register_common_handlers
-from handlers.dubber import register_dubber_handlers
-from handlers.timer import register_timer_handlers
-from handlers.admin import register_admin_handlers
+# Настраиваем логирование
+setup_logger()
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+load_dotenv()
 
 
 async def main():
-    """Основная функция запуска бота для aiogram 2.x"""
     try:
-        # Инициализация бота для aiogram 2.x
-        bot = Bot(token=BOT_TOKEN)
-        storage = MemoryStorage()
-        dp = Dispatcher(bot, storage=storage)
+        logger.info("Starting bot...")
 
-        # Регистрация обработчиков
-        register_common_handlers(dp)
-        register_dubber_handlers(dp)
-        register_timer_handlers(dp)
-        register_admin_handlers(dp)
+        # Инициализация БД
+        await init_database()
 
-        logger.info("✅ Бот инициализирован (aiogram 2.x)")
-        logger.info("✅ Обработчики зарегистрированы")
+        bot = Bot(token=os.getenv('BOT_TOKEN'))
+        dp = Dispatcher(storage=MemoryStorage())
 
-        # Запускаем бота
-        logger.info("🤖 Бот запущен")
-        await dp.start_polling()
+        # Запускаем систему уведомлений
+        await start_notification_scheduler(bot)
+
+        # Регистрируем обработчики ошибок
+        register_error_handlers(dp)
+
+        # Импортируем роутеры после инициализации
+        from .handlers import start, dubbing, timer, admin
+
+        # Регистрация роутеров
+        dp.include_router(start.router)
+        dp.include_router(dubbing.router)
+        dp.include_router(timer.router)
+        dp.include_router(admin.router)
+
+        logger.info("Bot started successfully")
+        await dp.start_polling(bot)
 
     except Exception as e:
-        logger.error(f"❌ Ошибка: {e}")
-        import traceback
-        traceback.print_exc()
+        logger.error(f"Failed to start bot: {e}", exc_info=True)
+        raise
+    finally:
+        # Всегда закрываем соединение с БД
+        await close_db_connection()
+        logger.info("Database connection closed")
 
 
-if __name__ == '__main__':
-    asyncio.run(main())
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logger.info("Bot stopped by user")
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}", exc_info=True)

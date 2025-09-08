@@ -1,0 +1,226 @@
+2025-09-08 16:13:23 - bot - INFO - Starting bot...
+2025-09-08 16:13:23 - bot - INFO - Bot started successfully
+2025-09-08 16:13:38 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 16:13:39 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 16:13:40 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Вернуться в меню
+2025-09-08 16:13:42 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 16:13:43 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 16:13:44 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 16:48:50 - bot - INFO - Starting bot...
+2025-09-08 16:48:50 - bot - INFO - Database initialized successfully
+2025-09-08 16:48:50 - bot - ERROR - Error adding test data: threads can only be started once
+2025-09-08 16:48:50 - bot - ERROR - Failed to start bot: name 'CallbackQuery' is not defined
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 34, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 2, in <module>
+    from .dubbing import router as dubbing_router
+  File "D:\BotFDS2.0\bot\handlers\dubbing.py", line 95, in <module>
+    async def title_selected(callback: CallbackQuery, state: FSMContext):
+NameError: name 'CallbackQuery' is not defined
+2025-09-08 16:48:50 - bot - ERROR - Unexpected error: name 'CallbackQuery' is not defined
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 52, in <module>
+    asyncio.run(main())
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 641, in run_until_complete
+    return future.result()
+  File "D:\BotFDS2.0\bot\main.py", line 34, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 2, in <module>
+    from .dubbing import router as dubbing_router
+  File "D:\BotFDS2.0\bot\handlers\dubbing.py", line 95, in <module>
+    async def title_selected(callback: CallbackQuery, state: FSMContext):
+NameError: name 'CallbackQuery' is not defined
+2025-09-08 16:58:45 - bot - INFO - Starting bot...
+2025-09-08 16:58:45 - bot - INFO - Database initialized successfully
+2025-09-08 16:58:45 - bot - ERROR - Error adding test data: threads can only be started once
+2025-09-08 16:58:45 - bot - INFO - Bot started successfully
+2025-09-08 16:58:45 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 16:58:45 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 16:58:45 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 16:58:45 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 16:58:51 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 16:58:54 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 16:58:55 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 16:59:00 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 16:59:00 - bot - INFO - User 6383312717 started bot
+2025-09-08 16:59:03 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 16:59:21 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:00:18 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:03:44 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:03:46 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 17:03:47 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:19:07 - bot - INFO - Starting bot...
+2025-09-08 17:19:07 - bot - INFO - Database initialized successfully
+2025-09-08 17:19:07 - bot - ERROR - Error adding test data: threads can only be started once
+2025-09-08 17:19:07 - bot - INFO - Bot started successfully
+2025-09-08 17:19:14 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:19:15 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 17:19:21 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 17:19:21 - bot - ERROR - Error getting user titles: threads can only be started once
+2025-09-08 17:19:28 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 17:19:33 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 17:19:33 - bot - ERROR - Error getting user debts: threads can only be started once
+2025-09-08 17:19:39 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Вернуться в меню
+2025-09-08 17:19:41 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 17:19:44 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:19:49 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:19:49 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 17:19:56 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 17:19:56 - bot - ERROR - Error getting user titles: threads can only be started once
+2025-09-08 17:20:02 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:20:02 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:20:04 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:34:48 - bot - INFO - Starting bot...
+2025-09-08 17:34:48 - bot - INFO - Database initialized successfully
+2025-09-08 17:34:48 - bot - INFO - Bot started successfully
+2025-09-08 17:34:48 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:34:49 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:34:54 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:34:54 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 17:35:05 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 17:35:11 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 17:35:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 17:35:17 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:35:17 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:35:18 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 17:35:21 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:43:18 - bot - INFO - Starting bot...
+2025-09-08 17:43:18 - bot - INFO - Database initialized successfully
+2025-09-08 17:43:18 - bot - INFO - Bot started successfully
+2025-09-08 17:43:25 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:43:25 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:43:28 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:43:28 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 17:43:31 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 17:43:36 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 17:43:37 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 17:43:46 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:43:46 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:43:48 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 17:43:49 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:54:34 - bot - INFO - Starting bot...
+2025-09-08 17:54:34 - bot - INFO - Database initialized successfully
+2025-09-08 17:54:34 - bot - INFO - Bot started successfully
+2025-09-08 17:54:48 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 17:54:49 - bot - INFO - User 6383312717 started bot
+2025-09-08 17:54:51 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 17:54:51 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 17:54:53 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 17:54:55 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 17:54:55 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 17:54:59 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 17:54:59 - bot - INFO - User 6383312717 opened menu
+2025-09-08 17:55:01 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 17:55:02 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 17:55:05 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /help
+2025-09-08 17:55:08 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
+2025-09-08 18:27:16 - bot - INFO - Starting bot...
+2025-09-08 18:27:16 - bot - INFO - Database initialized successfully
+2025-09-08 18:27:16 - bot - INFO - Notification scheduler started
+2025-09-08 18:27:16 - bot - ERROR - Failed to start bot: No module named 'bot.states.timer_state'
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 3, in <module>
+    from .timer import router as timer_router
+  File "D:\BotFDS2.0\bot\handlers\timer.py", line 7, in <module>
+    from ..states.timer_state import TimerState
+ModuleNotFoundError: No module named 'bot.states.timer_state'
+2025-09-08 18:27:16 - bot - INFO - Database connection closed
+2025-09-08 18:27:16 - bot - ERROR - Unexpected error: No module named 'bot.states.timer_state'
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 59, in <module>
+    asyncio.run(main())
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 641, in run_until_complete
+    return future.result()
+  File "D:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 3, in <module>
+    from .timer import router as timer_router
+  File "D:\BotFDS2.0\bot\handlers\timer.py", line 7, in <module>
+    from ..states.timer_state import TimerState
+ModuleNotFoundError: No module named 'bot.states.timer_state'
+2025-09-08 18:34:09 - bot - INFO - Starting bot...
+2025-09-08 18:34:09 - bot - INFO - Database initialized successfully
+2025-09-08 18:34:09 - bot - INFO - Notification scheduler started
+2025-09-08 18:34:09 - bot - INFO - Bot started successfully
+2025-09-08 18:34:14 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 18:34:15 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 18:34:19 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 18:34:26 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 18:34:27 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 18:34:30 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 18:34:30 - bot - INFO - User 6383312717 opened menu
+2025-09-08 18:34:32 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 18:34:34 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 18:34:36 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 18:34:36 - bot - INFO - User 6383312717 started bot
+2025-09-08 18:34:38 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
+2025-09-08 18:34:40 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /help
+2025-09-08 18:35:30 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 18:35:33 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 18:35:51 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 18:35:51 - bot - INFO - User 6383312717 opened menu
+2025-09-08 18:35:54 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 18:35:54 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 18:41:25 - bot - INFO - Starting bot...
+2025-09-08 18:41:25 - bot - INFO - Database initialized successfully
+2025-09-08 18:41:25 - bot - INFO - Notification scheduler started
+2025-09-08 18:41:25 - bot - ERROR - Failed to start bot: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.0\bot\database\db.py)
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 2, in <module>
+    from .dubbing import router as dubbing_router
+  File "D:\BotFDS2.0\bot\handlers\dubbing.py", line 7, in <module>
+    from ..database.db import ensure_user_exists, get_user_titles, add_report, get_user_debts, save_force_majeure
+ImportError: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.0\bot\database\db.py)
+2025-09-08 18:41:25 - bot - INFO - Database connection closed
+2025-09-08 18:41:25 - bot - ERROR - Unexpected error: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.0\bot\database\db.py)
+Traceback (most recent call last):
+  File "D:\BotFDS2.0\bot\main.py", line 59, in <module>
+    asyncio.run(main())
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 641, in run_until_complete
+    return future.result()
+  File "D:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "D:\BotFDS2.0\bot\handlers\__init__.py", line 2, in <module>
+    from .dubbing import router as dubbing_router
+  File "D:\BotFDS2.0\bot\handlers\dubbing.py", line 7, in <module>
+    from ..database.db import ensure_user_exists, get_user_titles, add_report, get_user_debts, save_force_majeure
+ImportError: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.0\bot\database\db.py)
+2025-09-08 18:43:32 - bot - INFO - Starting bot...
+2025-09-08 18:43:32 - bot - INFO - Database initialized successfully
+2025-09-08 18:43:32 - bot - INFO - Notification scheduler started
+2025-09-08 18:43:32 - bot - INFO - Bot started successfully
+2025-09-08 18:43:41 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Добавить роль таймера
+2025-09-08 18:43:41 - bot - INFO - User 6383312717 granted timer role
+2025-09-08 18:43:46 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать тайтл
+2025-09-08 18:43:57 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 18:43:57 - bot - INFO - User 6383312717 started bot
+2025-09-08 18:43:58 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 18:43:58 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 18:44:00 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Добавить роль таймера
+2025-09-08 18:44:00 - bot - INFO - User 6383312717 granted timer role
+2025-09-08 18:44:02 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать тайтл
+2025-09-08 18:44:08 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 18:44:08 - bot - INFO - User 6383312717 started bot
+2025-09-08 18:44:09 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 18:44:09 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 18:44:11 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 18:44:16 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 18:44:17 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 18:44:20 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 18:44:20 - bot - INFO - User 6383312717 opened menu
+2025-09-08 18:44:21 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 18:44:23 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 18:44:43 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 18:44:43 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 18:44:46 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
