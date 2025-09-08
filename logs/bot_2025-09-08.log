@@ -224,3 +224,69 @@ ImportError: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.
 2025-09-08 18:44:43 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
 2025-09-08 18:44:43 - bot - INFO - User 6383312717 entered dubber menu
 2025-09-08 18:44:46 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
+2025-09-08 21:46:14 - bot - INFO - Starting bot...
+2025-09-08 21:46:14 - bot - INFO - Database initialized successfully
+2025-09-08 21:46:14 - bot - INFO - Notification scheduler started
+2025-09-08 21:46:15 - bot - INFO - Bot started successfully
+2025-09-08 21:46:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 21:46:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 21:46:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 21:46:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 21:46:16 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Вернуться в меню
+2025-09-08 21:46:16 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Добавить роль таймера
+2025-09-08 21:46:16 - bot - INFO - User 6383312717 granted timer role
+2025-09-08 21:46:16 - bot - INFO - User 6383312717 started bot
+2025-09-08 21:46:33 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 21:46:33 - bot - INFO - User 6383312717 started bot
+2025-09-08 21:46:35 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 21:46:35 - bot - INFO - User 6383312717 entered timer menu
+2025-09-08 21:46:43 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 21:46:43 - bot - INFO - User 6383312717 started bot
+2025-09-08 21:46:44 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 21:46:45 - bot - INFO - User 6383312717 entered admin menu
+2025-09-08 21:46:53 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выгрузить отчет
+2025-09-08 21:46:57 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 21:46:57 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 21:47:01 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:47:01 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:47:02 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 21:47:02 - bot - INFO - User 6383312717 entered admin menu
+2025-09-08 21:47:05 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 21:47:06 - bot - INFO - User 6383312717 entered timer menu
+2025-09-08 21:47:12 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Просмотреть график сдавших
+2025-09-08 21:47:26 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 21:47:26 - bot - INFO - User 6383312717 started bot
+2025-09-08 21:47:27 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 21:47:27 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 21:47:28 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выбрать тайтл
+2025-09-08 21:47:29 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Добавить роль таймера
+2025-09-08 21:47:29 - bot - INFO - User 6383312717 granted timer role
+2025-09-08 21:47:32 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать тайтл
+2025-09-08 21:47:37 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:47:37 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:47:38 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 21:47:39 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 21:47:40 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Предупредить о форс-мажорах
+2025-09-08 21:47:41 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Мои долги
+2025-09-08 21:47:45 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
+2025-09-08 21:47:49 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /help
+2025-09-08 21:47:51 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:47:51 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:47:52 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 21:47:53 - bot - INFO - User 6383312717 entered timer menu
+2025-09-08 21:47:54 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать тайтл
+2025-09-08 21:48:01 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:48:01 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:48:02 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 21:48:02 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 21:48:04 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:48:05 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:48:06 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 21:48:06 - bot - INFO - User 6383312717 entered timer menu
+2025-09-08 21:48:08 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Просмотреть график сдавших
+2025-09-08 21:48:12 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать рассылку
+2025-09-08 21:48:27 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 21:48:27 - bot - INFO - User 6383312717 opened menu
+2025-09-08 21:48:30 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 21:48:30 - bot - INFO - User 6383312717 entered admin menu
+2025-09-08 21:48:33 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Вернуться в меню

@@ -3,6 +3,7 @@ from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.filters import Command
 
 from ..logger import logger, log_command
+from ..keyboards.dubber_kb import get_main_kb, get_dubber_main_kb, get_timer_main_kb, get_admin_main_kb
 
 router = Router()
 
@@ -87,14 +88,14 @@ async def cmd_stats(message: Message):
         stats_text = """
 📊 *Статистика системы*:
 
-• Пользователей: 15
-• Активных тайтлов: 8
-• Сданных серий: 124
-• Просроченных: 3
+• Пользователей: 0
+• Активных тайтлов: 0
+• Сданных серий: 0
+• Просроченных: 0
 
 *Ваша статистика*:
-• Ваших тайтлов: 2
-• Сданных серий: 15
+• Ваших тайтлов: 0
+• Сданных серий: 0
 • Просроченных: 0 ✅
         """
 
@@ -131,17 +132,38 @@ async def dubbing_menu(message: Message):
 async def timer_menu(message: Message):
     try:
         log_command(message.from_user.id, message.from_user.username, "Таймер")
-        await message.answer("Раздел Таймера в разработке!")
+
+        # Импортируем клавиатуру таймера здесь, чтобы избежать circular imports
+        from ..keyboards.timer_kb import get_timer_main_kb
+
+        await message.answer(
+            "⏰ *Панель таймера*\n\n"
+            "Выберите действие:",
+            reply_markup=get_timer_main_kb(),
+            parse_mode="Markdown"
+        )
+        logger.info(f"User {message.from_user.id} entered timer menu")
 
     except Exception as e:
         logger.error(f"Error in Таймер menu: {e}", exc_info=True)
-
+        await message.answer("Произошла ошибка. Попробуйте позже.")
 
 @router.message(F.text == "Админ")
 async def admin_menu(message: Message):
     try:
         log_command(message.from_user.id, message.from_user.username, "Админ")
-        await message.answer("Раздел Администратора в разработке!")
+
+        # Импортируем клавиатуру админа здесь, чтобы избежать circular imports
+        from ..keyboards.admin_kb import get_admin_main_kb
+
+        await message.answer(
+            "👑 *Панель администратора*\n\n"
+            "Доступные действия:",
+            reply_markup=get_admin_main_kb(),
+            parse_mode="Markdown"
+        )
+        logger.info(f"User {message.from_user.id} entered admin menu")
 
     except Exception as e:
         logger.error(f"Error in Админ menu: {e}", exc_info=True)
+        await message.answer("Произошла ошибка. Попробуйте позже.")
