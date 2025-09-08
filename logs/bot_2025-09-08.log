@@ -290,3 +290,55 @@ ImportError: cannot import name 'add_report' from 'bot.database.db' (D:\BotFDS2.
 2025-09-08 21:48:30 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
 2025-09-08 21:48:30 - bot - INFO - User 6383312717 entered admin menu
 2025-09-08 21:48:33 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Вернуться в меню
+2025-09-08 22:13:10 - bot - INFO - Starting bot...
+2025-09-08 22:13:10 - bot - INFO - Database initialized successfully
+2025-09-08 22:13:10 - bot - INFO - Notification scheduler started
+2025-09-08 22:13:10 - bot - ERROR - Failed to start bot: name 'router' is not defined
+Traceback (most recent call last):
+  File "C:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "C:\BotFDS2.0\bot\handlers\__init__.py", line 1, in <module>
+    from .start import router as start_router
+  File "C:\BotFDS2.0\bot\handlers\start.py", line 1, in <module>
+    @router.message(Command("start"))
+NameError: name 'router' is not defined
+2025-09-08 22:13:10 - bot - INFO - Database connection closed
+2025-09-08 22:13:10 - bot - ERROR - Unexpected error: name 'router' is not defined
+Traceback (most recent call last):
+  File "C:\BotFDS2.0\bot\main.py", line 59, in <module>
+    asyncio.run(main())
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\Admin\AppData\Local\Programs\Python\Python310\lib\asyncio\base_events.py", line 641, in run_until_complete
+    return future.result()
+  File "C:\BotFDS2.0\bot\main.py", line 37, in main
+    from .handlers import start, dubbing, timer, admin
+  File "C:\BotFDS2.0\bot\handlers\__init__.py", line 1, in <module>
+    from .start import router as start_router
+  File "C:\BotFDS2.0\bot\handlers\start.py", line 1, in <module>
+    @router.message(Command("start"))
+NameError: name 'router' is not defined
+2025-09-08 22:47:07 - bot - INFO - Starting bot...
+2025-09-08 22:47:07 - bot - INFO - Database initialized successfully
+2025-09-08 22:47:08 - bot - INFO - Notification scheduler started
+2025-09-08 22:47:08 - bot - INFO - Bot started successfully
+2025-09-08 22:54:57 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 22:54:58 - bot - INFO - User 6383312717 entered admin menu
+2025-09-08 22:54:59 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Выгрузить отчет
+2025-09-08 22:55:03 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 22:55:03 - bot - INFO - User 6383312717 entered timer menu
+2025-09-08 22:55:04 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Создать рассылку
+2025-09-08 22:55:07 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /start
+2025-09-08 22:55:07 - bot - INFO - User 6383312717 started bot
+2025-09-08 22:55:09 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Даббер
+2025-09-08 22:55:09 - bot - INFO - User 6383312717 entered dubber menu
+2025-09-08 22:55:15 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /help
+2025-09-08 22:55:19 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /stats
+2025-09-08 22:55:21 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 22:55:21 - bot - INFO - User 6383312717 opened menu
+2025-09-08 22:55:24 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Админ
+2025-09-08 22:55:24 - bot - INFO - User 6383312717 entered admin menu
+2025-09-08 22:55:28 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: /menu
+2025-09-08 22:55:28 - bot - INFO - User 6383312717 opened menu
+2025-09-08 22:55:29 - bot - INFO - User 6383312717 (PinkGooseCum) executed command: Таймер
+2025-09-08 22:55:29 - bot - INFO - User 6383312717 entered timer menu
